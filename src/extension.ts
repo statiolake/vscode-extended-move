@@ -31,6 +31,57 @@ function moveCursor(
     : new vscode.Selection(newPosition, newPosition);
 }
 
+// Find position of next whitespace
+function findNextWhitespace(
+  document: vscode.TextDocument,
+  position: vscode.Position
+): vscode.Position | undefined {
+  let lineAt = position.line;
+  let characterAt = position.character;
+
+  while (lineAt < document.lineCount) {
+    const line = document.lineAt(lineAt).text;
+    const match = /\s+/.exec(line.substring(characterAt));
+
+    if (match) {
+      return new vscode.Position(
+        lineAt,
+        characterAt + match.index + match[0].length
+      );
+    }
+
+    lineAt++;
+    characterAt = 0;
+  }
+
+  return undefined;
+}
+
+// Find position of previous whitespace
+function findPreviousWhitespace(
+  document: vscode.TextDocument,
+  position: vscode.Position
+): vscode.Position | undefined {
+  let lineAt = position.line;
+  let characterAt = position.character;
+
+  while (lineAt >= 0) {
+    const line = document.lineAt(lineAt).text;
+    if (characterAt < 0) characterAt = line.length;
+    const substring = line.substring(0, characterAt).trimEnd();
+    const match = /\s+(?=\S*$)/.exec(substring);
+
+    if (match) {
+      return new vscode.Position(lineAt, match.index + match[0].length);
+    }
+
+    lineAt--;
+    characterAt = -1;
+  }
+
+  return undefined;
+}
+
 // Implementation for moving to whitespace with line boundary handling
 function moveToWhitespace(direction: Direction, select: boolean) {
   if (!checkActiveEditor()) return;
@@ -40,48 +91,10 @@ function moveToWhitespace(direction: Direction, select: boolean) {
 
   for (const selection of editor.selections) {
     const position = selection.active;
-    let newPosition: vscode.Position | undefined = undefined;
-
-    if (direction === Direction.Forward) {
-      let lineAt = position.line;
-      let characterAt = position.character;
-      while (lineAt < document.lineCount) {
-        const line = document.lineAt(lineAt).text;
-        const match = /\s+/.exec(line.substring(characterAt));
-
-        if (match) {
-          newPosition = new vscode.Position(
-            lineAt,
-            characterAt + match.index + match[0].length
-          );
-
-          break;
-        }
-
-        lineAt++;
-        characterAt = 0;
-      }
-    } else {
-      let lineAt = position.line;
-      let characterAt = position.character;
-      while (lineAt >= 0) {
-        const line = document.lineAt(lineAt).text;
-        if (characterAt < 0) characterAt = line.length;
-        const substring = line.substring(0, characterAt).trimEnd();
-        const match = /\s+(?=\S*$)/.exec(substring);
-
-        if (match) {
-          newPosition = new vscode.Position(
-            lineAt,
-            match.index + match[0].length
-          );
-          break;
-        }
-
-        lineAt--;
-        characterAt = -1;
-      }
-    }
+    const newPosition =
+      direction === Direction.Forward
+        ? findNextWhitespace(document, position)
+        : findPreviousWhitespace(document, position);
 
     if (newPosition) {
       if (select) {
@@ -97,6 +110,49 @@ function moveToWhitespace(direction: Direction, select: boolean) {
   editor.selections = newSelections;
 }
 
+// Common function to update selections
+function updateSelections(
+  editor: vscode.TextEditor,
+  findPosition: (position: vscode.Position) => vscode.Position | undefined,
+  select: boolean
+): { found: boolean } {
+  let found = false;
+  editor.selections = editor.selections.map((selection) => {
+    const newPosition = findPosition(selection.active);
+    if (!newPosition) return selection;
+
+    found = true;
+    return new vscode.Selection(
+      select ? selection.anchor : newPosition,
+      newPosition
+    );
+  });
+  return { found };
+}
+
+// Find position of next character occurrence
+function findNextChar(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+  char: string
+): vscode.Position | undefined {
+  const line = document.lineAt(position.line).text;
+  const index = line.indexOf(char, position.character + 1);
+  return index !== -1 ? new vscode.Position(position.line, index) : undefined;
+}
+
+// Find position of previous character occurrence
+function findPreviousChar(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+  char: string
+): vscode.Position | undefined {
+  const line = document.lineAt(position.line).text;
+  const substring = line.substring(0, position.character);
+  const index = substring.lastIndexOf(char);
+  return index !== -1 ? new vscode.Position(position.line, index) : undefined;
+}
+
 // Implementation for moving to specified character
 function moveToChar(
   char: string,
@@ -107,32 +163,27 @@ function moveToChar(
   if (!checkActiveEditor()) return;
   const editor = vscode.window.activeTextEditor!;
   const document = editor.document;
-  const position = editor.selection.active;
-  const line = document.lineAt(position.line).text;
-  let newPosition: vscode.Position;
 
   // Update global state
   context.globalState.update(LAST_CHAR_KEY, char);
   context.globalState.update(LAST_DIRECTION_KEY, direction);
 
-  if (direction === Direction.Forward) {
-    const index = line.indexOf(char, position.character + 1);
-    if (index === -1) {
-      vscode.window.showInformationMessage(`Next char "${char}" not found`);
-      return;
-    }
-    newPosition = new vscode.Position(position.line, index);
-  } else {
-    const substring = line.substring(0, position.character);
-    const index = substring.lastIndexOf(char);
-    if (index === -1) {
-      vscode.window.showInformationMessage(`Previous char "${char}" not found`);
-      return;
-    }
-    newPosition = new vscode.Position(position.line, index);
-  }
+  const { found } = updateSelections(
+    editor,
+    (position) =>
+      direction === Direction.Forward
+        ? findNextChar(document, position, char)
+        : findPreviousChar(document, position, char),
+    select
+  );
 
-  moveCursor(editor, newPosition, select);
+  if (!found) {
+    const message =
+      direction === Direction.Forward
+        ? `Next char "${char}" not found`
+        : `Previous char "${char}" not found`;
+    vscode.window.showInformationMessage(message);
+  }
 }
 
 // Implementation for moving to last used character
