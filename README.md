@@ -1,71 +1,105 @@
-# vscode-extended-move README
+# Extended Move for VS Code
 
-This is the README for your extension "vscode-extended-move". After writing up a brief description, we recommend including the following sections.
+A Visual Studio Code extension that enhances cursor movement capabilities. This extension provides precise cursor movement features such as moving to whitespace characters and jumping to specific characters.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This extension provides 12 commands in 3 categories:
 
-For example if there is an image subfolder under your extension project workspace:
+### 1. Whitespace Movement
 
-\!\[feature X\]\(images/feature-x.png\)
+Commands for moving to whitespace characters (spaces, tabs):
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- `vscode-extended-move.moveToNextWhitespace`: Move to next whitespace
+- `vscode-extended-move.moveToPreviousWhitespace`: Move to previous whitespace
+- `vscode-extended-move.moveToNextWhitespaceSelect`: Move to next whitespace with selection
+- `vscode-extended-move.moveToPreviousWhitespaceSelect`: Move to previous whitespace with selection
 
-## Requirements
+### 2. Character Movement
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Commands for moving to a specified single character:
 
-## Extension Settings
+- `vscode-extended-move.moveToNextChar`: Move to next occurrence of specified character
+- `vscode-extended-move.moveToPreviousChar`: Move to previous occurrence of specified character
+- `vscode-extended-move.moveToNextCharSelect`: Move to next occurrence of specified character with selection
+- `vscode-extended-move.moveToPreviousCharSelect`: Move to previous occurrence of specified character with selection
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### 3. Last Character Movement
 
-For example:
+Commands for moving to the last used character:
 
-This extension contributes the following settings:
+- `vscode-extended-move.moveToNextCharWithLast`: Move to next occurrence of last used character
+- `vscode-extended-move.moveToPreviousCharWithLast`: Move to previous occurrence of last used character
+- `vscode-extended-move.moveToNextCharWithLastSelect`: Move to next occurrence of last used character with selection
+- `vscode-extended-move.moveToPreviousCharWithLastSelect`: Move to previous occurrence of last used character with selection
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Installation
 
-## Known Issues
+1. Open Visual Studio Code
+2. Click the Extensions icon in the sidebar
+3. Search for "Extended Move"
+4. Click Install
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## Keybinding Configuration
 
-## Release Notes
+This extension does not provide default keybindings. Users can configure their preferred keybindings.
 
-Users appreciate release notes as you update your extension.
+To configure keybindings:
 
-### 1.0.0
+1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
+2. Search for "Preferences: Open Keyboard Shortcuts"
+3. Find the command you want to bind and set your preferred key combination
 
-Initial release of ...
+Example keybinding configuration:
 
-### 1.0.1
+```json
+{
+  // Whitespace Movement
+  { "key": "alt+]", "command": "vscode-extended-move.moveToNextWhitespace" },
+  { "key": "alt+[", "command": "vscode-extended-move.moveToPreviousWhitespace" },
+  { "key": "alt+shift+]", "command": "vscode-extended-move.moveToNextWhitespaceSelect" },
+  { "key": "alt+shift+[", "command": "vscode-extended-move.moveToPreviousWhitespaceSelect" },
 
-Fixed issue #.
+  // Character Movement
+  { "key": "alt+;", "command": "vscode-extended-move.moveToNextChar" },
+  { "key": "alt+j", "command": "vscode-extended-move.moveToPreviousChar" },
+  { "key": "alt+shift+;", "command": "vscode-extended-move.moveToNextCharSelect" },
+  { "key": "alt+shift+j", "command": "vscode-extended-move.moveToPreviousCharSelect" },
 
-### 1.1.0
+  // Last Character Movement
+  { "key": "alt+p", "command": "vscode-extended-move.moveToNextCharWithLast" },
+  { "key": "alt+n", "command": "vscode-extended-move.moveToPreviousCharWithLast" },
+  { "key": "alt+shift+p", "command": "vscode-extended-move.moveToNextCharWithLastSelect" },
+  { "key": "alt+shift+n", "command": "vscode-extended-move.moveToPreviousCharWithLastSelect" }
+}
+```
 
-Added features X, Y, and Z.
+## Usage Examples
 
----
+1. Whitespace Movement
 
-## Following extension guidelines
+   - Quickly navigate between indented sections in your code
+   - Combine with selection to easily select indented blocks
+   - Useful for navigating through structured text or code
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+2. Character Movement
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+   - Jump directly to specific characters in a line (like commas or semicolons)
+   - When executing the command, you'll be prompted to enter a single character to move to
 
-## Working with Markdown
+3. Last Character Movement
+   - Reuse the last character you searched for
+   - Convenient when repeatedly moving to the same character
+   - No need to re-enter the character for subsequent moves
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## License
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+MIT License
 
-## For more information
+## Source Code
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+[GitHub Repository](https://github.com/statiolake/vscode-extended-move)
 
-**Enjoy!**
+## Feedback
+
+Please report bugs or request features through [GitHub Issues](https://github.com/statiolake/vscode-extended-move/issues).

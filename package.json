@@ -1,21 +1,73 @@
 {
   "name": "vscode-extended-move",
-  "displayName": "vscode-extended-move",
+  "displayName": "Extended Move",
   "description": "Bring extended move capabilities to VS Code",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "publisher": "statiolake",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/statiolake/vscode-extended-move"
+  },
   "engines": {
     "vscode": "^1.100.0"
   },
   "categories": [
-    "Other"
+    "Keymaps"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-extended-move.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-extended-move.moveToNextWhitespace",
+        "title": "Extended Move: Move to Next Whitespace"
+      },
+      {
+        "command": "vscode-extended-move.moveToPreviousWhitespace",
+        "title": "Extended Move: Move to Previous Whitespace"
+      },
+      {
+        "command": "vscode-extended-move.moveToNextWhitespaceSelect",
+        "title": "Extended Move: Move to Next Whitespace with Selection"
+      },
+      {
+        "command": "vscode-extended-move.moveToPreviousWhitespaceSelect",
+        "title": "Extended Move: Move to Previous Whitespace with Selection"
+      },
+      {
+        "command": "vscode-extended-move.moveToNextChar",
+        "title": "Extended Move: Move to Next Character"
+      },
+      {
+        "command": "vscode-extended-move.moveToPreviousChar",
+        "title": "Extended Move: Move to Previous Character"
+      },
+      {
+        "command": "vscode-extended-move.moveToNextCharSelect",
+        "title": "Extended Move: Move to Next Character with Selection"
+      },
+      {
+        "command": "vscode-extended-move.moveToPreviousCharSelect",
+        "title": "Extended Move: Move to Previous Character with Selection"
+      },
+      {
+        "command": "vscode-extended-move.moveToNextCharWithLast",
+        "title": "Extended Move: Move to Next Character (Use Last)"
+      },
+      {
+        "command": "vscode-extended-move.moveToPreviousCharWithLast",
+        "title": "Extended Move: Move to Previous Character (Use Last)"
+      },
+      {
+        "command": "vscode-extended-move.moveToNextCharWithLastSelect",
+        "title": "Extended Move: Move to Next Character with Selection (Use Last)"
+      },
+      {
+        "command": "vscode-extended-move.moveToPreviousCharWithLastSelect",
+        "title": "Extended Move: Move to Previous Character with Selection (Use Last)"
       }
     ]
   },
@@ -28,14 +80,16 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/sinon": "^17.0.4",
+    "@types/vscode": "^1.100.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "sinon": "^20.0.0",
+    "typescript": "^5.8.3"
   }
 }
