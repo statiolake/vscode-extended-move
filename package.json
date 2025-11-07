@@ -79,6 +79,14 @@
       {
         "command": "vscode-extended-move.moveToPreviousCharWithLastSelect",
         "title": "Extended Move: Move to Previous Character with Selection (Use Last)"
+      },
+      {
+        "command": "vscode-extended-move.exitCurrentSurrounding",
+        "title": "Extended Move: Exit Current Surrounding"
+      },
+      {
+        "command": "vscode-extended-move.enterPreviousSurrounding",
+        "title": "Extended Move: Enter Previous Surrounding"
       }
     ]
   },

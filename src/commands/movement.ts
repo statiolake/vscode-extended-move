@@ -12,7 +12,7 @@ import {
  * Move cursor to next/previous whitespace
  */
 export function moveToWhitespace(direction: Direction, select: boolean) {
-  if (!checkActiveEditor()) return;
+  if (!checkActiveEditor()) {return;}
   const editor = vscode.window.activeTextEditor!;
   const document = editor.document;
 
@@ -35,7 +35,7 @@ export function moveToChar(
   select: boolean,
   context: vscode.ExtensionContext
 ) {
-  if (!checkActiveEditor()) return;
+  if (!checkActiveEditor()) {return;}
   const editor = vscode.window.activeTextEditor!;
   const document = editor.document;
 

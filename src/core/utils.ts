@@ -23,7 +23,7 @@ export function updateSelections(
   let found = false;
   editor.selections = editor.selections.map((selection) => {
     const newPosition = findPosition(selection.active);
-    if (!newPosition) return selection;
+    if (!newPosition) {return selection;}
 
     found = true;
     return new vscode.Selection(

@@ -5,6 +5,10 @@ import {
   moveToChar,
   moveToLastChar,
 } from "./commands/movement";
+import {
+  exitCurrentSurrounding,
+  enterPreviousSurrounding,
+} from "./commands/surrounding";
 
 export function activate(context: vscode.ExtensionContext) {
   // Whitespace-related commands
@@ -138,6 +142,25 @@ export function activate(context: vscode.ExtensionContext) {
       "vscode-extended-move.moveToPreviousCharWithLastSelect",
       () => {
         moveToLastChar(Direction.Backward, true, context);
+      }
+    )
+  );
+
+  // Exit surrounding brackets/quotes commands
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-extended-move.exitCurrentSurrounding",
+      () => {
+        exitCurrentSurrounding();
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-extended-move.enterPreviousSurrounding",
+      () => {
+        enterPreviousSurrounding();
       }
     )
   );
