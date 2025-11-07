@@ -2,7 +2,7 @@
   "name": "vscode-extended-move",
   "displayName": "Extended Move",
   "description": "Enhanced cursor movement with whitespace and character navigation, supporting multi-cursor operations",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "statiolake",
   "license": "MIT",
   "repository": {
@@ -16,7 +16,9 @@
     "Keymaps",
     "Other"
   ],
-  "extensionKind": ["ui"],
+  "extensionKind": [
+    "ui"
+  ],
   "keywords": [
     "cursor",
     "movement",
