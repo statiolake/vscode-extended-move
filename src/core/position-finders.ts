@@ -83,17 +83,20 @@ export function findPreviousChar(
 }
 
 /**
- * Check if a character is an opening bracket/quote
- */
-function isOpeningChar(char: string): boolean {
-  return ["(", "[", "{", '"', "'", "`"].includes(char);
-}
-
-/**
  * Check if a character is a closing bracket/quote
  */
 function isClosingChar(char: string): boolean {
   return [")", "]", "}", '"', "'", "`"].includes(char);
+}
+
+/**
+ * Check if a character is whitespace or punctuation
+ * This includes spaces, tabs, commas, semicolons, colons, etc.
+ */
+function isWhitespaceOrPunctuation(char: string): boolean {
+  // Whitespace: space, tab, newline, etc.
+  // Punctuation: common punctuation marks excluding brackets/quotes
+  return /^[\s,;:.\-+*/<>=!&|^~?@#$%\\]$/.test(char);
 }
 
 /**
@@ -109,93 +112,6 @@ function getOpeningChar(closeChar: string): string | null {
     "`": "`",
   };
   return pairs[closeChar] || null;
-}
-
-/**
- * Get the matching closing character for an opening character
- */
-function getClosingChar(openChar: string): string | null {
-  const pairs: { [key: string]: string } = {
-    "(": ")",
-    "[": "]",
-    "{": "}",
-    '"': '"',
-    "'": "'",
-    "`": "`",
-  };
-  return pairs[openChar] || null;
-}
-
-/**
- * Find the matching closing bracket/quote for an opening character at a given offset
- */
-function findMatchingCloseOffset(
-  document: vscode.TextDocument,
-  openOffset: number,
-  openChar: string
-): number {
-  const lastLine = document.lineCount - 1;
-  const lastLineRange = document.lineAt(lastLine).range;
-  const docEnd = document.offsetAt(lastLineRange.end);
-  const closeChar = getClosingChar(openChar);
-  if (!closeChar) {
-    return -1;
-  }
-
-  let pos = openOffset + 1;
-  let depth = 1;
-
-  // For quotes (same open and close char)
-  if (openChar === closeChar) {
-    while (pos < docEnd) {
-      const char = document.getText(
-        new vscode.Range(
-          document.positionAt(pos),
-          document.positionAt(pos + 1)
-        )
-      );
-
-      if (char === "\\" && pos + 1 < docEnd) {
-        pos += 2;
-        continue;
-      }
-
-      if (char === closeChar) {
-        return pos;
-      }
-
-      pos++;
-    }
-    return -1;
-  }
-
-  // For brackets (different open and close char)
-  while (pos < docEnd) {
-    const char = document.getText(
-      new vscode.Range(
-        document.positionAt(pos),
-        document.positionAt(pos + 1)
-      )
-    );
-
-    if (char === "\\" && pos + 1 < docEnd) {
-      pos += 2;
-      continue;
-    }
-
-    if (char === openChar) {
-      depth++;
-    } else if (char === closeChar) {
-      depth--;
-      if (depth === 0) {
-        return pos;
-      }
-    }
-
-    pos++;
-  }
-
-  return -1;
 }
 
 /**
@@ -287,6 +203,8 @@ function findMatchingOpenOffset(
 
 /**
  * Find the next closing bracket/quote from the given position
+ * Only returns a position if the characters between cursor and closing bracket
+ * are all whitespace or punctuation. Returns undefined if any other character is found.
  */
 export function findNextClosingBracket(
   document: vscode.TextDocument,
@@ -306,24 +224,14 @@ export function findNextClosingBracket(
       )
     );
 
-    // Handle escape sequences
-    if (char === "\\" && pos + 1 < docEnd) {
-      pos += 2;
-      continue;
-    }
-
     // If we find a closing character, return it
     if (isClosingChar(char)) {
       return document.positionAt(pos);
     }
 
-    // If we find an opening character, skip to its matching closing
-    if (isOpeningChar(char)) {
-      const matchingClose = findMatchingCloseOffset(document, pos, char);
-      if (matchingClose >= 0) {
-        pos = matchingClose + 1;
-        continue;
-      }
+    // Only allow whitespace and punctuation between cursor and closing bracket
+    if (!isWhitespaceOrPunctuation(char)) {
+      return undefined;
     }
 
     pos++;
@@ -334,15 +242,46 @@ export function findNextClosingBracket(
 
 /**
  * Find the previous closing bracket/quote from the given position
+ * Only works if the immediate previous character is a closing bracket/quote.
+ * Returns the position to move to inside the bracket, skipping back through
+ * whitespace and punctuation as far as possible.
  */
 export function findPreviousClosingBracket(
   document: vscode.TextDocument,
   position: vscode.Position
 ): vscode.Position | undefined {
   const startOffset = document.offsetAt(position);
-  let pos = startOffset - 1;
 
-  while (pos >= 0) {
+  // Check if there's a character before the cursor
+  if (startOffset <= 0) {
+    return undefined;
+  }
+
+  // Check the immediate previous character
+  const prevChar = document.getText(
+    new vscode.Range(
+      document.positionAt(startOffset - 1),
+      document.positionAt(startOffset)
+    )
+  );
+
+  // Only proceed if the immediate previous character is a closing bracket/quote
+  if (!isClosingChar(prevChar)) {
+    return undefined;
+  }
+
+  // Find the matching opening bracket
+  const closingOffset = startOffset - 1;
+  const openingOffset = findMatchingOpenOffset(document, closingOffset, prevChar);
+  if (openingOffset < 0) {
+    return undefined;
+  }
+
+  // Now scan backwards from just before the closing bracket,
+  // skipping whitespace and punctuation, stopping at other characters or the opening bracket
+  let pos = closingOffset - 1;
+
+  while (pos > openingOffset) {
     const char = document.getText(
       new vscode.Range(
         document.positionAt(pos),
@@ -350,36 +289,14 @@ export function findPreviousClosingBracket(
       )
     );
 
-    // Handle escape sequences (check previous char)
-    if (pos > 0) {
-      const prevChar = document.getText(
-        new vscode.Range(
-          document.positionAt(pos - 1),
-          document.positionAt(pos)
-        )
-      );
-      if (prevChar === "\\") {
-        pos -= 2;
-        continue;
-      }
-    }
-
-    // If we find a closing character, return it
-    if (isClosingChar(char)) {
-      return document.positionAt(pos);
-    }
-
-    // If we find an opening character, skip to its matching opening
-    if (isOpeningChar(char)) {
-      const matchingOpen = findMatchingOpenOffset(document, pos, char);
-      if (matchingOpen >= 0) {
-        pos = matchingOpen - 1;
-        continue;
-      }
+    // Stop if we find a non-whitespace, non-punctuation character
+    if (!isWhitespaceOrPunctuation(char)) {
+      break;
     }
 
     pos--;
   }
 
-  return undefined;
+  // Return position after the last non-skippable character (or after opening bracket)
+  return document.positionAt(pos + 1);
 }
