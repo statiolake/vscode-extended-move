@@ -35,60 +35,176 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-extended-move.moveToNextWhitespace",
+        "command": "vscode-extended-move.cursorNextWhitespace",
         "title": "Extended Move: Move to Next Whitespace"
       },
       {
-        "command": "vscode-extended-move.moveToPreviousWhitespace",
+        "command": "vscode-extended-move.cursorPrevWhitespace",
         "title": "Extended Move: Move to Previous Whitespace"
       },
       {
-        "command": "vscode-extended-move.moveToNextWhitespaceSelect",
+        "command": "vscode-extended-move.cursorNextWhitespaceSelect",
         "title": "Extended Move: Move to Next Whitespace with Selection"
       },
       {
-        "command": "vscode-extended-move.moveToPreviousWhitespaceSelect",
+        "command": "vscode-extended-move.cursorPrevWhitespaceSelect",
         "title": "Extended Move: Move to Previous Whitespace with Selection"
       },
       {
-        "command": "vscode-extended-move.moveToNextChar",
+        "command": "vscode-extended-move.cursorNextChar",
         "title": "Extended Move: Move to Next Character"
       },
       {
-        "command": "vscode-extended-move.moveToPreviousChar",
+        "command": "vscode-extended-move.cursorPrevChar",
         "title": "Extended Move: Move to Previous Character"
       },
       {
-        "command": "vscode-extended-move.moveToNextCharSelect",
+        "command": "vscode-extended-move.cursorNextCharSelect",
         "title": "Extended Move: Move to Next Character with Selection"
       },
       {
-        "command": "vscode-extended-move.moveToPreviousCharSelect",
+        "command": "vscode-extended-move.cursorPrevCharSelect",
         "title": "Extended Move: Move to Previous Character with Selection"
       },
       {
-        "command": "vscode-extended-move.moveToNextCharWithLast",
+        "command": "vscode-extended-move.cursorNextCharWithLast",
         "title": "Extended Move: Move to Next Character (Use Last)"
       },
       {
-        "command": "vscode-extended-move.moveToPreviousCharWithLast",
+        "command": "vscode-extended-move.cursorPrevCharWithLast",
         "title": "Extended Move: Move to Previous Character (Use Last)"
       },
       {
-        "command": "vscode-extended-move.moveToNextCharWithLastSelect",
+        "command": "vscode-extended-move.cursorNextCharWithLastSelect",
         "title": "Extended Move: Move to Next Character with Selection (Use Last)"
       },
       {
-        "command": "vscode-extended-move.moveToPreviousCharWithLastSelect",
+        "command": "vscode-extended-move.cursorPrevCharWithLastSelect",
         "title": "Extended Move: Move to Previous Character with Selection (Use Last)"
       },
       {
-        "command": "vscode-extended-move.exitCurrentSurrounding",
+        "command": "vscode-extended-move.cursorExitSurrounding",
         "title": "Extended Move: Exit Current Surrounding"
       },
       {
-        "command": "vscode-extended-move.enterPreviousSurrounding",
+        "command": "vscode-extended-move.cursorEnterSurrounding",
         "title": "Extended Move: Enter Previous Surrounding"
+      },
+      {
+        "command": "vscode-extended-move.selectTextObject",
+        "title": "Extended Move: Select Text Object"
+      },
+      {
+        "command": "vscode-extended-move.innerWordSelect",
+        "title": "Extended Move: Select Inner Word"
+      },
+      {
+        "command": "vscode-extended-move.aroundWordSelect",
+        "title": "Extended Move: Select Around Word"
+      },
+      {
+        "command": "vscode-extended-move.innerWORDSelect",
+        "title": "Extended Move: Select Inner WORD"
+      },
+      {
+        "command": "vscode-extended-move.aroundWORDSelect",
+        "title": "Extended Move: Select Around WORD"
+      },
+      {
+        "command": "vscode-extended-move.innerParenSelect",
+        "title": "Extended Move: Select Inner Paren ()"
+      },
+      {
+        "command": "vscode-extended-move.aroundParenSelect",
+        "title": "Extended Move: Select Around Paren ()"
+      },
+      {
+        "command": "vscode-extended-move.innerBraceSelect",
+        "title": "Extended Move: Select Inner Brace {}"
+      },
+      {
+        "command": "vscode-extended-move.aroundBraceSelect",
+        "title": "Extended Move: Select Around Brace {}"
+      },
+      {
+        "command": "vscode-extended-move.innerBracketSelect",
+        "title": "Extended Move: Select Inner Bracket []"
+      },
+      {
+        "command": "vscode-extended-move.aroundBracketSelect",
+        "title": "Extended Move: Select Around Bracket []"
+      },
+      {
+        "command": "vscode-extended-move.innerAngleSelect",
+        "title": "Extended Move: Select Inner Angle <>"
+      },
+      {
+        "command": "vscode-extended-move.aroundAngleSelect",
+        "title": "Extended Move: Select Around Angle <>"
+      },
+      {
+        "command": "vscode-extended-move.innerDoubleQuoteSelect",
+        "title": "Extended Move: Select Inner Double Quote"
+      },
+      {
+        "command": "vscode-extended-move.aroundDoubleQuoteSelect",
+        "title": "Extended Move: Select Around Double Quote"
+      },
+      {
+        "command": "vscode-extended-move.innerSingleQuoteSelect",
+        "title": "Extended Move: Select Inner Single Quote"
+      },
+      {
+        "command": "vscode-extended-move.aroundSingleQuoteSelect",
+        "title": "Extended Move: Select Around Single Quote"
+      },
+      {
+        "command": "vscode-extended-move.innerBacktickSelect",
+        "title": "Extended Move: Select Inner Backtick"
+      },
+      {
+        "command": "vscode-extended-move.aroundBacktickSelect",
+        "title": "Extended Move: Select Around Backtick"
+      },
+      {
+        "command": "vscode-extended-move.innerTagSelect",
+        "title": "Extended Move: Select Inner Tag"
+      },
+      {
+        "command": "vscode-extended-move.aroundTagSelect",
+        "title": "Extended Move: Select Around Tag"
+      },
+      {
+        "command": "vscode-extended-move.innerParagraphSelect",
+        "title": "Extended Move: Select Inner Paragraph"
+      },
+      {
+        "command": "vscode-extended-move.aroundParagraphSelect",
+        "title": "Extended Move: Select Around Paragraph"
+      },
+      {
+        "command": "vscode-extended-move.innerArgumentSelect",
+        "title": "Extended Move: Select Inner Argument"
+      },
+      {
+        "command": "vscode-extended-move.aroundArgumentSelect",
+        "title": "Extended Move: Select Around Argument"
+      },
+      {
+        "command": "vscode-extended-move.innerEntireSelect",
+        "title": "Extended Move: Select Inner Entire Document"
+      },
+      {
+        "command": "vscode-extended-move.aroundEntireSelect",
+        "title": "Extended Move: Select Around Entire Document"
+      },
+      {
+        "command": "vscode-extended-move.innerIndentSelect",
+        "title": "Extended Move: Select Inner Indent"
+      },
+      {
+        "command": "vscode-extended-move.aroundIndentSelect",
+        "title": "Extended Move: Select Around Indent"
       }
     ]
   },
