@@ -1,37 +1,42 @@
 # Extended Move for VS Code
 
-A Visual Studio Code extension that enhances cursor movement capabilities. This extension provides precise cursor movement features such as moving to whitespace characters and jumping to specific characters.
+A Visual Studio Code extension that provides Vim-style cursor movement and text object selection features.
+
+> **Migration Notice**: This extension supersedes [vscode-extended-selects](https://github.com/statiolake/vscode-extended-selects). If you're using that extension, please switch to Extended Move for continued updates.
 
 ## Features
 
-This extension provides 12 commands in 3 categories:
+This extension provides two main categories of commands:
 
-### 1. Whitespace Movement
+### 1. Cursor Movement
 
-Commands for moving to whitespace characters (spaces, tabs):
+Commands for moving the cursor with precision:
 
-- `vscode-extended-move.moveToNextWhitespace`: Move to next whitespace
-- `vscode-extended-move.moveToPreviousWhitespace`: Move to previous whitespace
-- `vscode-extended-move.moveToNextWhitespaceSelect`: Move to next whitespace with selection
-- `vscode-extended-move.moveToPreviousWhitespaceSelect`: Move to previous whitespace with selection
+- **Whitespace Movement**: Move to next/previous whitespace characters
+- **Character Movement**: Jump to specific characters with input prompts
+- **Last Character Movement**: Reuse the last searched character
+- **Surrounding Navigation**: Exit or enter bracket/quote pairs
 
-### 2. Character Movement
+### 2. Text Object Selection
 
-Commands for moving to a specified single character:
+Vim-style text objects for selecting inner/around regions:
 
-- `vscode-extended-move.moveToNextChar`: Move to next occurrence of specified character
-- `vscode-extended-move.moveToPreviousChar`: Move to previous occurrence of specified character
-- `vscode-extended-move.moveToNextCharSelect`: Move to next occurrence of specified character with selection
-- `vscode-extended-move.moveToPreviousCharSelect`: Move to previous occurrence of specified character with selection
-
-### 3. Last Character Movement
-
-Commands for moving to the last used character:
-
-- `vscode-extended-move.moveToNextCharWithLast`: Move to next occurrence of last used character
-- `vscode-extended-move.moveToPreviousCharWithLast`: Move to previous occurrence of last used character
-- `vscode-extended-move.moveToNextCharWithLastSelect`: Move to next occurrence of last used character with selection
-- `vscode-extended-move.moveToPreviousCharWithLastSelect`: Move to previous occurrence of last used character with selection
+| ID | Shortcut | Description |
+|---|---|---|
+| inner/around-word | iw/aw | Word |
+| inner/around-WORD | iW/aW | WORD (whitespace-delimited) |
+| inner/around-paren | i(/a( | Parentheses `()` |
+| inner/around-brace | i{/a{ | Braces `{}` |
+| inner/around-bracket | i[/a[ | Brackets `[]` |
+| inner/around-angle | i</a< | Angle brackets `<>` |
+| inner/around-double-quote | i"/a" | Double quotes |
+| inner/around-single-quote | i'/a' | Single quotes |
+| inner/around-backtick | i`/a` | Backticks |
+| inner/around-tag | it/at | HTML/XML tags |
+| inner/around-paragraph | ip/ap | Paragraph |
+| inner/around-argument | ia/aa | Function argument |
+| inner/around-indent | ii/ai | Indent block |
+| inner/around-entire | ie/ae | Entire document |
 
 ## Installation
 
@@ -40,57 +45,54 @@ Commands for moving to the last used character:
 3. Search for "Extended Move"
 4. Click Install
 
+## Usage
+
+### Text Object Selection
+
+1. Run `Extended Move: Select Text Object` from Command Palette
+2. Type to filter text objects (e.g., `ip` for inner paragraph)
+3. Press Enter to select
+
+Or bind individual commands directly to keybindings.
+
+### Cursor Movement
+
+All cursor movement commands are available via Command Palette and can be bound to keys.
+
 ## Keybinding Configuration
 
-This extension does not provide default keybindings. Users can configure their preferred keybindings.
-
-To configure keybindings:
-
-1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
-2. Search for "Preferences: Open Keyboard Shortcuts"
-3. Find the command you want to bind and set your preferred key combination
-
-Example keybinding configuration:
+This extension does not provide default keybindings. Configure your preferred keybindings in `keybindings.json`:
 
 ```json
 {
-  // Whitespace Movement
-  { "key": "alt+]", "command": "vscode-extended-move.moveToNextWhitespace" },
-  { "key": "alt+[", "command": "vscode-extended-move.moveToPreviousWhitespace" },
-  { "key": "alt+shift+]", "command": "vscode-extended-move.moveToNextWhitespaceSelect" },
-  { "key": "alt+shift+[", "command": "vscode-extended-move.moveToPreviousWhitespaceSelect" },
+  // Text Object Selection
+  { "key": "alt+s", "command": "vscode-extended-move.selectTextObject" },
 
-  // Character Movement
-  { "key": "alt+;", "command": "vscode-extended-move.moveToNextChar" },
-  { "key": "alt+j", "command": "vscode-extended-move.moveToPreviousChar" },
-  { "key": "alt+shift+;", "command": "vscode-extended-move.moveToNextCharSelect" },
-  { "key": "alt+shift+j", "command": "vscode-extended-move.moveToPreviousCharSelect" },
-
-  // Last Character Movement
-  { "key": "alt+p", "command": "vscode-extended-move.moveToNextCharWithLast" },
-  { "key": "alt+n", "command": "vscode-extended-move.moveToPreviousCharWithLast" },
-  { "key": "alt+shift+p", "command": "vscode-extended-move.moveToNextCharWithLastSelect" },
-  { "key": "alt+shift+n", "command": "vscode-extended-move.moveToPreviousCharWithLastSelect" }
+  // Cursor Movement
+  { "key": "alt+]", "command": "vscode-extended-move.cursorNextWhitespace" },
+  { "key": "alt+[", "command": "vscode-extended-move.cursorPrevWhitespace" },
+  { "key": "alt+]", "command": "vscode-extended-move.cursorExitSurrounding" },
+  { "key": "alt+[", "command": "vscode-extended-move.cursorEnterSurrounding" }
 }
 ```
 
-## Usage Examples
+See the [full command list](#commands) for all available commands.
 
-1. Whitespace Movement
+## Commands
 
-   - Quickly navigate between indented sections in your code
-   - Combine with selection to easily select indented blocks
-   - Useful for navigating through structured text or code
+### Text Object Selection
+- `vscode-extended-move.selectTextObject` - Open QuickPick to select text object
+- `vscode-extended-move.innerWordSelect` - Select inner word
+- `vscode-extended-move.aroundWordSelect` - Select around word
+- ... (and more for each text object type)
 
-2. Character Movement
-
-   - Jump directly to specific characters in a line (like commas or semicolons)
-   - When executing the command, you'll be prompted to enter a single character to move to
-
-3. Last Character Movement
-   - Reuse the last character you searched for
-   - Convenient when repeatedly moving to the same character
-   - No need to re-enter the character for subsequent moves
+### Cursor Movement
+- `vscode-extended-move.cursorNextWhitespace` - Move to next whitespace
+- `vscode-extended-move.cursorPrevWhitespace` - Move to previous whitespace
+- `vscode-extended-move.cursorNextChar` - Move to next specified character
+- `vscode-extended-move.cursorPrevChar` - Move to previous specified character
+- `vscode-extended-move.cursorExitSurrounding` - Exit current surrounding brackets/quotes
+- `vscode-extended-move.cursorEnterSurrounding` - Enter previous surrounding brackets/quotes
 
 ## License
 
