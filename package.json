@@ -2,7 +2,7 @@
   "name": "vscode-extended-move",
   "displayName": "Extended Move",
   "description": "Enhanced cursor movement with whitespace and character navigation, supporting multi-cursor operations",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "publisher": "statiolake",
   "license": "MIT",
   "repository": {
@@ -216,7 +216,9 @@
     "lint": "eslint src",
     "test": "vscode-test",
     "package": "vsce package",
-    "publish": "vsce publish"
+    "publish": "npm run publish:vsce && npm run publish:ovsx",
+    "publish:vsce": "vsce publish",
+    "publish:ovsx": "ovsx publish"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
@@ -225,10 +227,11 @@
     "@types/vscode": "^1.100.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.6.2",
     "eslint": "^9.25.1",
+    "ovsx": "^1.1.1",
     "sinon": "^20.0.0",
     "typescript": "^5.8.3"
   }

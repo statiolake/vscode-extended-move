@@ -1,11 +1,47 @@
+# Editor / tooling config
 .vscode/**
 .vscode-test/**
-src/**
-.gitignore
-.yarnrc
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/eslint.config.mjs
-**/*.map
-**/*.ts
+.vscode-test.mjs
 **/.vscode-test.*
+.claude/**
+.github/**
+.gitignore
+.gitattributes
+.yarnrc
+.editorconfig
+
+# Sources (out/ holds the shipped JS and is kept)
+src/**
+**/tsconfig*.json
+**/eslint.config.*
+**/biome.json*
+**/.eslintrc*
+**/*.ts
+**/*.map
+
+# Tests
+out/test/**
+**/test/**
+**/*.test.*
+**/__tests__/**
+
+# Docs not meant for the marketplace listing
+vsc-extension-quickstart.md
+
+# Lockfiles / packaged artifacts
+node_modules/**
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+**/*.vsix
+
+# Secrets — never ship these
+.env
+.env.*
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+.ovsx-token
+.vsce-token
+**/.npmrc
